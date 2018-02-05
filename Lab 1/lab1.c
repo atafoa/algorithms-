@@ -2,11 +2,8 @@
 #include <limits.h>
 #include <stdlib.h>
 
-
 void ranksByMerge(int m, int n, int probe, int *a, int *b);
 int binarySearch(int *a,int n,int key);
-
-
 
 int main(){
 	
@@ -42,16 +39,26 @@ int main(){
 	
 	return 0;
 }
+
 void ranksByMerge(int m, int n, int probe, int *a, int *b) // finds rank of each number at probe
 {
 	int i,j,k;
 	i=j=k=1;
+	int found;
 	
 	while (i<=m && j<=n)
-	{	if (a[i]<=b[j])
-		{ if( probe == k)
+	{
+		printf("i is: %d",i);
+		printf("j is: %d",j);
+		printf("a[%d] is %d",i,a[i]);
+		printf("b[%d] is %d",j,b[j]);
+		
+		if (a[i]<=b[j])
+		{
+			if( probe == k)
 			{
-				binarySearch(a, m, probe);
+				found = binarySearch(a, m, probe);
+				printf("a[%d] has rank %d",i,a[i]);
 			}
 			k++;
 		}
@@ -59,11 +66,11 @@ void ranksByMerge(int m, int n, int probe, int *a, int *b) // finds rank of each
 		{
 			if(probe == k)
 			{
-				binarySearch(b, n, probe);
+				found = binarySearch(b, n, probe);
+				printf("b[%d] has rank %d",j,b[j]);
 			}
 			k++;
 		}
-		
 		i++;
 		j++;
 	}
@@ -72,18 +79,12 @@ void ranksByMerge(int m, int n, int probe, int *a, int *b) // finds rank of each
 	while (j<=n)
 		k++;
 }
+
 int binarySearch(int *a,int n,int key)
-// Input: int array a[] with n elements in ascending order.
-//        int key to find.
-// Output: Returns some subscript of a where key is found.
-//         Returns -1 if not found.
-// Processing: Binary search.
 {
 	int low,high,mid;
 	low=0;
 	high=n-1;
-	// subscripts between low and high are in search range.
-	// size of range halves in each iteration.
 	while (low<=high)
 	{
 		mid=(low+high)/2;
@@ -93,6 +94,9 @@ int binarySearch(int *a,int n,int key)
 			low=mid+1;
 		else
 			high=mid-1;
+		
+		printf("Low is: %d",low);
+		printf("High is: %d",high);
 	}
 	
 	return (-1); // key does not appear
