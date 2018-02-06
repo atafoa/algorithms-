@@ -30,13 +30,9 @@ int main(){
 	b[0] = -99999999;
 	b[n+1] = 99999999;
 	
-	for( i = 0; i < m+2; i++)
-	{
-		printf("%d",a[i]);
-	}
-	
 	scanf("%d",&probe);
-	
+
+	ranksByMerge(m, n, probe, a, b);
 	return 0;
 }
 
