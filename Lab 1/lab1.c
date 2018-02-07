@@ -21,9 +21,24 @@ int main(){
 	
 	int k, *a = 0, *b = 0, rank = 0, smallestSize = 0, biggestSize = 0;
 	int high, low;
+	int x,y;
 	
-	inputArray(m,a);
-	inputArray(n,b);
+	a = (int *)malloc((m+2) * sizeof(int));
+	b = (int *)malloc((n+2) * sizeof(int));
+	
+	for(x = 1; x < m+1; x++)
+	{
+		scanf("%d",&a[x]);
+	}
+	a[0] = -99999999;
+	a[m+1] = 99999999;
+	
+	for(y = 1; y < n+1; y++)
+	{
+		scanf("%d",&b[y]);
+	}
+	b[0] = -99999999;
+	b[n+1] = 99999999;
 	
 	if(m > n)
 	{	smallestSize = n;
@@ -51,19 +66,6 @@ int main(){
 	   }
 	return 0;
 }
-
-void inputArray(int size, int *array)
-{
-	array = (int *)malloc((size+2) * sizeof(int));
-	int i;
-	for(i = 1; i <size+1; i++)
-	{
-		scanf("%d",&array[i]);
-	}
-	array[0] = -99999999;
-	array[size+1] = 99999999;
-}
-
 
 int binarySearch(int *a,int *b, int low, int high, int rank)
 {
