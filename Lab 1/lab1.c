@@ -1,9 +1,17 @@
 /* Lab 1
  
  CSE 2320 - Lab 1
- Created By Atafo Abure
+ Created By Atafo Abure 1001442575
+ This program is going to help you predict the outcome of a mergesort using binary search. It will required the inputs for the two arrays and the number of probes
  Feb 6 2018
 
+ How to run
+ To compile and run use the following commands
+ gcc lab1.c
+ a.out < inputFile.txt
+ 
+ inputFile.txt would be the name of the input file you want to work with.
+ Note the inputFile has to be in the same directory as the lab1.c file
  */
 
 #include <stdio.h>
@@ -11,6 +19,8 @@
 
 void binarySearch(int *a,int *b, int low, int high, int rank);
 
+
+//main function
 int main(){
 	
 	int m, n, p;
@@ -40,15 +50,19 @@ int main(){
 	b[0] = -99999999;
 	b[n+1] = 99999999;
 	
-	if(p > m || p > n) // Test case to account for the number of probes being larger than the size of both arrays
+	// Test case to account for the number of probes being larger than the size of both arrays
+	if(p > m || p > n)
 	{
 		printf("Number of probes given are larger than the sizes of every array");
+		free(a);
+		free(b);
 		return 0; // quits the program
 	}
 	
-	for(k = 0; k < p; k++) // run the program for the given number of ranks
+	// run the binary search function for the given number of ranks
+	for(k = 0; k < p; k++)
 	{
-		scanf("%d",&rank); // get the ranks from the input files
+		scanf("%d",&rank);
 		
 		//if statement to find which array is the larger array
 		if(m > n)
@@ -70,11 +84,16 @@ int main(){
 		if(low < 0)
 			low = 0;
 		
-		binarySearch(a, b, low, high, rank); // call binary search function
+		binarySearch(a, b, low, high, rank); // call binary search function and predict the merge sort
 	   }
+	
+	//free dynamically allocated arrays
+	free(a);
+	free(b);
 	return 0;
 }
 
+//binary search function used to predict the outcome of a mergesort
 void binarySearch(int *a,int *b, int low, int high, int rank)
 {
 	
@@ -89,6 +108,7 @@ void binarySearch(int *a,int *b, int low, int high, int rank)
 		printf("Low is: %d High is: %d ",low, high);
 		printf("i is: %d j is: %d ",i,j);
 		printf("a[%d] is: %d b[%d] is: %d\n",i,a[i],j,b[j]);
+		
 		
 		mid=(low+high)/2; //mid splits the array in half for the purpose of binary search
 		
