@@ -6,7 +6,6 @@
  */
 
 #include <stdio.h>
-#include <limits.h>
 #include <stdlib.h>
 
 void binarySearch(int *a,int *b, int low, int high, int rank);
@@ -39,7 +38,13 @@ int main(){
 	b[0] = -99999999;
 	b[n+1] = 99999999;
 	
-	for(k = 0; k < p; k++) // fix this line to collect probe after probe
+	if(p > m || p > n)
+	{
+		printf("Number of probes given are larger than the sizes of every array"); 
+		return 0;
+	}
+	
+	for(k = 0; k < p; k++)
 	{
 		scanf("%d",&rank);
 		
@@ -52,11 +57,11 @@ int main(){
 			biggestSize = n;
 		}
 		
-		if(rank > smallestSize)
+		if(rank > smallestSize && m <= n)
 			high = smallestSize;
 		else
 			high = rank;
-		
+	
 		low = rank - biggestSize;
 		if(low < 0)
 			low = 0;
