@@ -9,8 +9,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-void inputArray(int size, int *array);
-int binarySearch(int *a,int *b, int low, int high, int rank);
+void binarySearch(int *a,int *b, int low, int high, int rank);
 
 int main(){
 	
@@ -40,34 +39,34 @@ int main(){
 	b[0] = -99999999;
 	b[n+1] = 99999999;
 	
-	if(m > n)
-	{	smallestSize = n;
-		biggestSize = m;
-	}
-	else
-	{	smallestSize = m;
-		biggestSize = n;
-	}
-	
-	if(rank > smallestSize)
-		high = smallestSize;
-	else
-		high = rank;
-	
-	low = rank - biggestSize;
-	if(low < 0)
-		low = 0;
-	
 	for(k = 0; k < p; k++) // fix this line to collect probe after probe
 	{
 		scanf("%d",&rank);
-		printf("Low is: %d High is: %d",low, high);
-		rank = binarySearch(a, b, low, high, rank);
+		
+		if(m > n)
+		{	smallestSize = n;
+			biggestSize = m;
+		}
+		else
+		{	smallestSize = m;
+			biggestSize = n;
+		}
+		
+		if(rank > smallestSize)
+			high = smallestSize;
+		else
+			high = rank;
+		
+		low = rank - biggestSize;
+		if(low < 0)
+			low = 0;
+		
+		binarySearch(a, b, low, high, rank);
 	   }
 	return 0;
 }
 
-int binarySearch(int *a,int *b, int low, int high, int rank)
+void binarySearch(int *a,int *b, int low, int high, int rank)
 {
 	
 	int i, j;
@@ -78,8 +77,9 @@ int binarySearch(int *a,int *b, int low, int high, int rank)
 		i = (low+high)/2;
 		j = rank - i;
 		
-		printf("i is: %d j is: %d",i,j);
-		printf("a[%d] is: %d b[%d] is: %d",i,a[i],j,b[j]);
+		printf("Low is: %d High is: %d ",low, high);
+		printf("i is: %d j is: %d ",i,j);
+		printf("a[%d] is: %d b[%d] is: %d\n",i,a[i],j,b[j]);
 		
 		mid=(low+high)/2;
 		
@@ -89,20 +89,20 @@ int binarySearch(int *a,int *b, int low, int high, int rank)
 			{
 				if(a[i] <= b[j+1])
 				{
-					printf("a[%d] has rank: %d\n",a[i],rank);
-					return a[i];
+					printf("a[%d] = %d has rank %d\n",i,a[i],rank);
+					break;
 				}
 				else
 				{
 					high = mid - 1;
 				}
 			}
-			else
+			else if(a[i] <= b[j])
 			{
-				if(b[j] <= a[i+1])
+				if(b[j] < a[i+1])
 				{
-					printf("b[%d] has rank: %d\n",b[j],rank);
-					return b[j];
+					printf("b[%d] = %d has rank %d\n",j,b[j],rank);
+					break;
 				}
 				else
 				{
@@ -112,7 +112,6 @@ int binarySearch(int *a,int *b, int low, int high, int rank)
 		}
 		
 	}
-	
-	return (-1); // rank does not appear
+
 }
 
