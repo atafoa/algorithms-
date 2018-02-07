@@ -1,9 +1,16 @@
+/* Lab 1
+ 
+ Created By Atafo Abure
+ Feb 6 2018
+
+ */
+
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
 
-void ranksByMerge(int m, int n, int probe, int *a, int *b);
-int binarySearch(int *a,int n,int key);
+void inputArray(int size, int *array);
+int binarySearch(int *a,int *b, int low, int high, int rank);
 
 int main(){
 	
@@ -12,89 +19,98 @@ int main(){
 	scanf("%d",&n);
 	scanf("%d",&p);
 	
-	int i, j, *a, *b, probe;
-	a = (int *)malloc((m+2) * sizeof(int));
-	b = (int *)malloc((n+2) * sizeof(int));
+	int k, *a = 0, *b = 0, rank = 0, smallestSize = 0, biggestSize = 0;
+	int high, low;
 	
-	for(i = 1; i < m+1; i++)
-	{
-		scanf("%d",&a[i]);
+	inputArray(m,a);
+	inputArray(n,b);
+	
+	if(m > n)
+	{	smallestSize = n;
+		biggestSize = m;
 	}
-	a[0] = -99999999;
-	a[m+1] = 99999999;
-	
-	for(j = 1; j < n+1; j++)
-	{
-		scanf("%d",&b[j]);
+	else
+	{	smallestSize = m;
+		biggestSize = n;
 	}
-	b[0] = -99999999;
-	b[n+1] = 99999999;
 	
-	scanf("%d",&probe);
-
-	ranksByMerge(m, n, probe, a, b);
+	if(rank > smallestSize)
+		high = smallestSize;
+	else
+		high = rank;
+	
+	low = rank - biggestSize;
+	if(low < 0)
+		low = 0;
+	
+	for(k = 0; k < p; k++) // fix this line to collect probe after probe
+	{
+		scanf("%d",&rank);
+		printf("Low is: %d High is: %d",low, high);
+		rank = binarySearch(a, b, low, high, rank);
+	   }
 	return 0;
 }
 
-void ranksByMerge(int m, int n, int probe, int *a, int *b) // finds rank of each number at probe
+void inputArray(int size, int *array)
 {
-	int i,j,k;
-	i=j=k=1;
-	int found;
-	
-	while (i<=m && j<=n)
+	array = (int *)malloc((size+2) * sizeof(int));
+	int i;
+	for(i = 1; i <size+1; i++)
 	{
-		printf("i is: %d",i);
-		printf("j is: %d",j);
-		printf("a[%d] is %d",i,a[i]);
-		printf("b[%d] is %d",j,b[j]);
-		
-		if (a[i]<=b[j])
-		{
-			if( probe == k)
-			{
-				found = binarySearch(a, m, probe);
-				printf("a[%d] has rank %d",i,a[i]);
-			}
-			k++;
-		}
-		else
-		{
-			if(probe == k)
-			{
-				found = binarySearch(b, n, probe);
-				printf("b[%d] has rank %d",j,b[j]);
-			}
-			k++;
-		}
-		i++;
-		j++;
+		scanf("%d",&array[i]);
 	}
-	while (i<=m)
-		k++;
-	while (j<=n)
-		k++;
+	array[0] = -99999999;
+	array[size+1] = 99999999;
 }
 
-int binarySearch(int *a,int n,int key)
+
+int binarySearch(int *a,int *b, int low, int high, int rank)
 {
-	int low,high,mid;
-	low=0;
-	high=n-1;
+	
+	int i, j;
+	int mid;
+
 	while (low<=high)
 	{
-		mid=(low+high)/2;
-		if (a[mid]==key)
-			return mid; // key found
-		if (a[mid]<key)
-			low=mid+1;
-		else
-			high=mid-1;
+		i = (low+high)/2;
+		j = rank - i;
 		
-		printf("Low is: %d",low);
-		printf("High is: %d",high);
+		printf("i is: %d j is: %d",i,j);
+		printf("a[%d] is: %d b[%d] is: %d",i,a[i],j,b[j]);
+		
+		mid=(low+high)/2;
+		
+		if(i + j ==  rank)
+		{
+			if(b[j] < a[i])
+			{
+				if(a[i] <= b[j+1])
+				{
+					printf("a[%d] has rank: %d\n",a[i],rank);
+					return a[i];
+				}
+				else
+				{
+					high = mid - 1;
+				}
+			}
+			else
+			{
+				if(b[j] <= a[i+1])
+				{
+					printf("b[%d] has rank: %d\n",b[j],rank);
+					return b[j];
+				}
+				else
+				{
+					low = mid+1;
+				}
+			}
+		}
+		
 	}
 	
-	return (-1); // key does not appear
+	return (-1); // rank does not appear
 }
 
