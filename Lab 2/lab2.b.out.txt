@@ -1,0 +1,10 @@
+1 3 5 0 3
+dryer gap from 8 to 11
+4 8 6 3 11
+dryer gap from 17 to 18
+3 7 3 11 18
+dryer gap from 21 to 22
+0 4 2 18 22
+dryer gap from 24 to 27
+2 5 1 22 27
+makespan is: 28
