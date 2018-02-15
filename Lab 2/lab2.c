@@ -7,8 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void populateArray( int *array, int arraySize);
+void populateArray( int *arrayA,int *arrayB, int arraySize);
 void printArray(int *array, int arraySize);
+int cmpfunc(const void *a, const void *b);
+void sortArray(int *array, int arraySize);
 
 int main() {
 	
@@ -20,32 +22,30 @@ int main() {
 	int *dryTime = (int *)malloc((numofBaskets)*sizeof(int));
 	
 	
-	populateArray(washTime, numofBaskets);
-	populateArray(dryTime, numofBaskets);
+	printf("The total number of baskets we have to process are: %d\n",numofBaskets);
+	populateArray(washTime,dryTime,numofBaskets);
 	
 	printArray(washTime, numofBaskets);
 	printArray(dryTime, numofBaskets);
 	
+	//perform qsort
+	sortArray(washTime, numofBaskets);
+	sortArray(dryTime, numofBaskets);
 	
+	//array after qsort
+	printArray(washTime, numofBaskets);
+	printArray(dryTime, numofBaskets);
 	
-//	int i;
-//	for (i = 0; i < numofBaskets; i++)
-//	{
-//		scanf("%d",&washTime[i]);
-//		scanf("%d",&dryTime[i]);
-//	}
-//
-	
-
 	return 0;
 }
 
-void populateArray( int *array, int arraySize)
+void populateArray( int *arrayA,int *arrayB, int arraySize)
 {
 	int i;
 	for(i = 0;i < arraySize; i++)
 	{
-		scanf("%d", &array[i]);
+		scanf("%d", &arrayA[i]);
+		scanf("%d", &arrayB[i]);
 	}
 }
 
@@ -55,7 +55,17 @@ void printArray(int *array, int arraySize)
 	int i;
 	for(i = 0;i < arraySize; i++)
 	{
-		printf("%d",array[i]);
+		printf("%d\n",array[i]);
 	}
+	printf("\n");
 }
 
+int cmpfunc(const void *a, const void *b)
+{
+	return (*(int *)a - *(int *)b);
+}
+
+void sortArray(int *array, int arraySize)
+{
+	qsort(array, arraySize, sizeof(int), cmpfunc);
+}
