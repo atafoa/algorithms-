@@ -6,56 +6,73 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-void populateArray( int *arrayA,int *arrayB, int arraySize);
-void printArray(int *array, int arraySize);
+
+
+struct laundry
+{
+	int numofBaskets;
+	int *washTime;
+	int *dryTime;
+	
+};
+
+void populateArray(struct laundry sampleLoad);
+void printArray(struct laundry sampleLoad);
 int cmpfunc(const void *a, const void *b);
 void sortArray(int *array, int arraySize);
 
+
 int main() {
 	
-	int numofBaskets;
-
-	scanf("%d",&numofBaskets);
 	
-	int *washTime = (int *)malloc((numofBaskets)*sizeof(int));
-	int *dryTime = (int *)malloc((numofBaskets)*sizeof(int));
+	struct laundry load;
+	scanf("%d",&load.numofBaskets);
+	
+	load.washTime = (int *)malloc((load.numofBaskets)*sizeof(int));
+	load.dryTime = (int *)malloc((load.numofBaskets)*sizeof(int));
 	
 	
-	printf("The total number of baskets we have to process are: %d\n",numofBaskets);
-	populateArray(washTime,dryTime,numofBaskets);
+	printf("The total number of baskets we have to process are: %d\n",load.numofBaskets);
+	populateArray(load);
 	
-	printArray(washTime, numofBaskets);
-	printArray(dryTime, numofBaskets);
+	printArray(load);
 	
 	//perform qsort
-	sortArray(washTime, numofBaskets);
-	sortArray(dryTime, numofBaskets);
+	
 	
 	//array after qsort
-	printArray(washTime, numofBaskets);
-	printArray(dryTime, numofBaskets);
+	
 	
 	return 0;
 }
 
-void populateArray( int *arrayA,int *arrayB, int arraySize)
+void populateArray( struct laundry sampleLoad)
 {
 	int i;
-	for(i = 0;i < arraySize; i++)
+	for(i = 0;i < sampleLoad.numofBaskets; i++)
 	{
-		scanf("%d", &arrayA[i]);
-		scanf("%d", &arrayB[i]);
+		scanf("%d", &sampleLoad.washTime[i]);
+		scanf("%d", &sampleLoad.dryTime[i]);
 	}
 }
 
 
-void printArray(int *array, int arraySize)
+void printArray(struct laundry sampleLoad)
 {
 	int i;
-	for(i = 0;i < arraySize; i++)
+	printf("Wash Times\n");
+	for(i = 0;i < sampleLoad.numofBaskets; i++)
 	{
-		printf("%d\n",array[i]);
+		printf("%d\n",sampleLoad.washTime[i]);
+	}
+	printf("\n");
+	
+	printf("Dry Times\n");
+	for(i = 0;i < sampleLoad.numofBaskets; i++)
+	{
+		printf("%d\n",sampleLoad.dryTime[i]);
 	}
 	printf("\n");
 }
