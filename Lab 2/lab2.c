@@ -12,77 +12,137 @@
 
 struct laundry
 {
-	int numofBaskets;
-	int *washTime;
-	int *dryTime;
+	int basketNumber;
+	int washTime;
+	int dryTime;
 	
 };
 
-void populateArray(struct laundry sampleLoad);
-void printArray(struct laundry sampleLoad);
-int cmpfunc(const void *a, const void *b);
-void sortArray(int *array, int arraySize);
+void populateArray(struct laundry sampleLoad[], int size);
+void printArray(struct laundry sampleLoad[] , int size);
+int cmpfunc(const void *p, const void *q);
+void sortByLowestValue(struct laundry sampleLoad[], int size);
+int findMin(int a, int b);
+void johnsonsRule(struct laundry sampleLoad[], int size);
 
 
 int main() {
 	
 	
-	struct laundry load;
-	scanf("%d",&load.numofBaskets);
-	
-	load.washTime = (int *)malloc((load.numofBaskets)*sizeof(int));
-	load.dryTime = (int *)malloc((load.numofBaskets)*sizeof(int));
-	
-	
-	printf("The total number of baskets we have to process are: %d\n",load.numofBaskets);
-	populateArray(load);
-	
-	printArray(load);
-	
-	//perform qsort
+	int numofBaskets;	//Gets total number of baskets
+	scanf("%d",&numofBaskets);
+	struct laundry baskets[numofBaskets];
+
 	
 	
-	//array after qsort
-	
+	printf("The total number of baskets we have to process are: %d\n",numofBaskets);
+	populateArray(baskets,numofBaskets);
+	printArray(baskets,numofBaskets);
+	qsort(baskets, numofBaskets, sizeof(struct laundry), cmpfunc);
+	printf("The schedule is \n");
+	johnsonsRule(baskets, numofBaskets);
 	
 	return 0;
 }
 
-void populateArray( struct laundry sampleLoad)
+void populateArray( struct laundry sampleLoad[], int size)
 {
 	int i;
-	for(i = 0;i < sampleLoad.numofBaskets; i++)
+	for(i = 0;i < size; i++)
 	{
-		scanf("%d", &sampleLoad.washTime[i]);
-		scanf("%d", &sampleLoad.dryTime[i]);
+		sampleLoad[i].basketNumber = i;
+		scanf("%d", &sampleLoad[i].washTime);
+		scanf("%d", &sampleLoad[i].dryTime);
 	}
 }
 
 
-void printArray(struct laundry sampleLoad)
+void printArray(struct laundry sampleLoad[] , int size)
 {
 	int i;
-	printf("Wash Times\n");
-	for(i = 0;i < sampleLoad.numofBaskets; i++)
+	for(i = 0;i < size; i++)
 	{
-		printf("%d\n",sampleLoad.washTime[i]);
+		printf("For basket %d\n", sampleLoad[i].basketNumber);
+		printf("Washtime: %d Drytime: %d\n",sampleLoad[i].washTime,sampleLoad[i].dryTime);
+		printf("\n");
 	}
 	printf("\n");
+}
+
+int cmpfunc(const void *p, const void *q) //compares two basket values for qsort and then  returns an integer expected by q
+{
+	struct laundry *basketp = (struct laundry *)p;
+	struct laundry *basketq = (struct laundry *)q;
 	
-	printf("Dry Times\n");
-	for(i = 0;i < sampleLoad.numofBaskets; i++)
+	int min1 = findMin(basketp -> washTime, basketp -> dryTime);
+	int min2 = findMin(basketq -> washTime, basketq -> dryTime);
+	
+	if(min1 < min2)
+		return -1;
+	if(min1 == min2)
+		return 0;
+	if(min1 > min2)
+		return 1;
+	
+	return 0;
+}
+
+ int findMin(int a, int b) // find the minimum value of 2 integers
+{
+	if(a < b)
 	{
-		printf("%d\n",sampleLoad.dryTime[i]);
+		return a;
 	}
-	printf("\n");
+	else return b;
 }
 
-int cmpfunc(const void *a, const void *b)
+//
+//
+//
+void johnsonsRule(struct laundry sampleLoad[], int size)
 {
-	return (*(int *)a - *(int *)b);
-}
-
-void sortArray(int *array, int arraySize)
-{
-	qsort(array, arraySize, sizeof(int), cmpfunc);
+	struct laundry sampleBaskets[size];
+	
+	int index = 0;
+	int left = 0;
+	int right = size - 1;
+	int washerTime = 0;
+	int dryerTime = 0;
+	
+	while(index < size)
+	{
+		if(sampleLoad[index].washTime < sampleLoad[index].dryTime)
+		{
+			sampleBaskets[left] = sampleLoad[index];
+			left++;
+		}
+		else
+		{
+			sampleBaskets[right] = sampleLoad[index];
+			right--;
+		}
+		index++;
+	}
+	
+	index = 0;
+	//Perform first dryertime calculation before entering the loop.
+	dryerTime = sampleBaskets[index].washTime;
+	
+	while(index < size)
+	{
+		if(dryerTime < sampleBaskets[index].washTime + washerTime)
+		{
+			//dryer is idle
+			printf("The dryer is inactive from %d  to %d\n", dryerTime, sampleBaskets[index].washTime + washerTime);
+			dryerTime = sampleBaskets[index].washTime + washerTime;
+		}
+		
+		printf("Basket %d Wash Time: %d Dry Time: %d, Washer Start: %d Dryer Start: %d\n",sampleBaskets[index].basketNumber, sampleBaskets[index].washTime, sampleBaskets[index].dryTime,washerTime,dryerTime);
+		
+		washerTime = washerTime + sampleBaskets[index].washTime;
+		dryerTime = dryerTime + sampleBaskets[index].dryTime;
+		index++;
+	}
+	
+	printf("Makespan is: %d\n",dryerTime);
 }
