@@ -14,70 +14,104 @@
  Note the inputFile has to be in the same directory as the lab3.c file
  */
 
-// Optimal matrix multiplication order using dynamic programming
 #include <stdio.h>
 #include <stdlib.h>
-//void tree(int left,int right,int indent);
 
 
-
-struct Test
+struct Symbols // Stores all symbols in an order preserving manner
 {
 	double probability;
 	int symbol;
 };
 
+void populateSymbols(struct Symbols sentinel[], int size);
+void costFunction(struct Symbols sentinel[], int size, double cost[size][size], int trace[size][size]);
+void printCostFunction(int size, double cost[size][size], int trace[size][size]);
+
 int main()
 {
-	struct Test *tests;
-	int n;
-	scanf("%d",&n);
-	//double p[n];
-	double c[n][n];
-	int trace[n][n];
+	struct Symbols *symbols;
+	int size;
+	scanf("%d",&size);
+	double cost[size][size];
+	int trace[size][size];
 	
-	tests = (struct Test *)malloc(n*sizeof(struct Test));
+	symbols = (struct Symbols *)malloc(size * sizeof(struct Symbols));
 	
-	int i,j,k;
+	populateSymbols(symbols, size);
+	costFunction(symbols, size, cost, trace);
+	printCostFunction(size, cost, trace);
+	
+}
+
+//Populates the array with the probability and the symbol for each symbol in the huffman tree
+void populateSymbols(struct Symbols sentinel[], int size)
+{
+	int i;
+	
+	for (i = 0;i <= size;i++)
+	{
+		scanf("%lf",&sentinel[i].probability);
+		sentinel[i].symbol = i;
+	}
+}
+
+//This function calculates the optimal matrix multiplication order using dynamic programming
+void costFunction(struct Symbols sentinel[], int size, double cost[size][size], int trace[size][size])
+{
 	double work;
+	int i, j, k;
 	
-	for (i=0;i<=n;i++)
-	{	scanf("%lf",&tests[i].probability);
-		tests[i].symbol = i;
+	for (i = 1; i <= size; i++)
+	{
+		cost[i][i] = trace[i][i] = 0;
 	}
 	
-	for (i=1;i<=n;i++)
-		c[i][i]=trace[i][i]=0;
-	
-	for (i=1;i<n;i++)
-		for (j=1;j<=n-i;j++)
+	for (i = 1;i < size; i++)
+	{
+		for (j = 1; j <= size-i;j ++)
 		{
-			c[j][j+i]=999999;
-			for (k=j;k<j+i;k++)
+			cost[j][j+i]=999999;
+			
+			for (k = j; k < j+i; k++)
 			{
-				work=tests[j].probability+c[j][k]+c[k+1][j+i];
-				if (c[j][j+i]>work)
+				work = sentinel[j].probability+cost[j][k]+cost[k+1][j+i];
+				
+				if (cost[j][j+i] > work)
 				{
-					c[j][j+i]=work;
-					trace[j][j+i]=k;
+					cost [j][j+i] = work;
+					trace[j][j+i] = k;
 				}
 			}
 		}
-	
+	}
+}
+
+
+//This function prints out the optimal matrix multiplication order created in the function costFunction
+void printCostFunction(int size, double cost[size][size], int trace[size][size])
+{
+	int i,j;
 	printf("   ");
-	for (i=1;i<=n;i++)
+	for ( i = 1; i <= size; i++)
+	{
 		printf("   %3d   ",i);
+	}
+	
 	printf("\n");
-	for (i=1;i<=n;i++)
+	
+	for (i = 1; i <= size; i++)
 	{
 		printf("%2d ",i);
-		for (j=1;j<=n;j++)
+		for (j = 1; j <= size; j++)
+		{
 			if (i>j)
 				printf(" ------- ");
 			else
-				printf(" %.1lf %3d ",c[i][j],trace[i][j]);
-		printf("\n");
+				printf(" %.1lf %3d ",cost[i][j],trace[i][j]);
+		}
 		
+		printf("\n");
 		printf("\n");
 	}
 }
