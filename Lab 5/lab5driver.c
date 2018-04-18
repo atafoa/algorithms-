@@ -33,7 +33,7 @@ int main()
 
 	scanf(formatString,inputString);
 	STinit();
-	STdeserialize(inputString);
+	STdeserialize(inputString); //Deserialize 
 	free(inputString);
 
 	//STprintTree();
@@ -41,11 +41,11 @@ int main()
 	for ( i = 0; i < insertKeys; i++) 
 	{
 	  scanf("%d",&key);
-	  STinsert(key);
+	  STinsert(key); //Insert keys
 	}
 
 	//STprintTree();
-	outputString = STserialize();
+	outputString = STserialize(); //serialize new rb tree
 	printf("%lu %s\n",strlen(outputString)+1,outputString);
 	free(outputString);
 }
