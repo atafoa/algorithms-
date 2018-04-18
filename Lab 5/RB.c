@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "RB.h"
+#include "RB.lab5.h"
 
 link z,head;               // Pointers to sentinel and root
 Item NULLitem=(-9999999);  // Data for sentinel
