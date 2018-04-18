@@ -13,6 +13,7 @@ link z,head;               // Pointers to sentinel and root
 Item NULLitem=(-9999999);  // Data for sentinel
 
 int trace=0;  // Controls trace output for insert
+int offset = 0; //Offset for the *str
 
 link NEW(Item item, link l, link r, int N)
 // Allocates and fills in a node
@@ -457,34 +458,42 @@ link STdeserialize(char *str)
   Item item;
   int num = 0;
 
-  if(*str == '.')
+  if(str[offset] == '.')
   {
-    str++;
+    printf("offset when checking for .  is %d \n",offset);
+    offset++;
     return z;
   }
 
-  if(*str == '-')
+  if(str[offset] == '-')
   {
+    printf("offset when checking for -  is %d \n",offset);
     sign = -1;
+    offset++;
   }
-  else if (*str == '+')
+  else if (str[offset] == '+')
   {
+    printf("offset when checking for .  is %d \n",offset);
     sign = 1;
+    offset++;
   }
   else
     sign = 1;
 
   num *= sign;
  
-  while ( *str >= '0' && *str <= '9')
+  while ( str[offset] >= '0' && str[offset] <= '9')
   {
-    num = 10 * num + (*str - '0'); 
+    printf("Entering the while loop");
+    num = 10 * num + ((str[offset]) - '0'); 
+    printf("While loop is looking at %d",num);
     item = num;
-    str++;
+    offset++;
   }
 
-  if(*str == 'b')
+  if(str[offset] == 'b')
   {
+    printf("Checking the red black color of the number");
     rbColor = 0;
   }
   else

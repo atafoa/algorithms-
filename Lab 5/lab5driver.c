@@ -34,6 +34,7 @@ int main()
 	scanf(formatString,inputString);
 	STinit();
 	STdeserialize(inputString); //Deserialize 
+	verifyRBproperties();
 	free(inputString);
 
 	//STprintTree();
