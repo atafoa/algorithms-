@@ -44,9 +44,9 @@ int main()
 	  scanf("%d",&key);
 	  STinsert(key); //Insert keys
 	}
-
-	//STprintTree();
-	outputString = STserialize(); //serialize new rb tree
-	printf("%lu %s\n",strlen(outputString)+1,outputString);
-	free(outputString);
+	STprintTree();
+	
+	//outputString = STserialize(); //serialize new rb tree
+	//printf("%lu %s\n",strlen(outputString)+1,outputString);
+	//free(outputString);
 }

@@ -457,57 +457,52 @@ link STdeserialize(char *str)
   int rbColor;
   Item item;
   int num = 0;
+  char c = num;
 
-  if(str[offset] == '.')
+
+  if(*(str+offset) == '.')
   {
-    printf("offset when checking for .  is %d \n",offset);
     offset++;
     return z;
   }
 
-  if(str[offset] == '-')
+  if(*(str+offset) == '-')
   {
-    printf("offset when checking for -  is %d \n",offset);
     sign = -1;
     offset++;
   }
-  else if (str[offset] == '+')
+  else if (*(str+offset) == '+')
   {
-    printf("offset when checking for .  is %d \n",offset);
     sign = 1;
     offset++;
   }
   else
     sign = 1;
-
+  
+  while ( *(str+offset) >= '0' && *(str+offset) <= '9')
+  {
+    num = 10 * num + (*(str+offset) - '0'); 
+    offset++;
+  }
   num *= sign;
- 
-  while ( str[offset] >= '0' && str[offset] <= '9')
-  {
-    printf("Entering the while loop");
-    num = 10 * num + ((str[offset]) - '0'); 
-    printf("While loop is looking at %d",num);
-    item = num;
-    offset++;
-  }
+   struct STnode* newNode = NEW(num,z,z,0);
+    if(head == z)
+      head = newNode;
 
-  if(str[offset] == 'b')
+  if(*(str+offset) == 'b')
   {
-    printf("Checking the red black color of the number");
-    rbColor = 0;
+    newNode -> red = 0;
   }
-  else
-    rbColor = 1;
+  offset++;
  
- struct STnode* newNode = NEW(item,z,z,0);
+
  newNode -> red = rbColor;
 
- if(head == z)
-  head = newNode;
+
 
  newNode->l = STdeserialize(str);
  newNode->r = STdeserialize(str);
-
+ 
  return newNode;
 }
 
