@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = 
+
 
 a: RB.o lab5driver.o 
 	${CC} ${FLAGS} RB.o lab5driver.o 

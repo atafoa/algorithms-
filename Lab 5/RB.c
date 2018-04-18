@@ -451,26 +451,25 @@ return 0;
 }
 
 link STdeserialize(char *str)  
-//Takes a string and makes a valid RB tree using that string
+//Deserializes a string to make a valid RB tree
 {
   int sign;
-  int rbColor;
-  Item item;
   int num = 0;
-  char c = num;
 
-
+  //checks if the charater is a sentinal
   if(*(str+offset) == '.')
   {
     offset++;
     return z;
   }
 
+  //checks if the sign is negative
   if(*(str+offset) == '-')
   {
     sign = -1;
     offset++;
   }
+  //checks if the 
   else if (*(str+offset) == '+')
   {
     sign = 1;
@@ -484,8 +483,9 @@ link STdeserialize(char *str)
     num = 10 * num + (*(str+offset) - '0'); 
     offset++;
   }
-  num *= sign;
-   struct STnode* newNode = NEW(num,z,z,0);
+
+   num *= sign;
+   struct STnode* newNode = NEW(num,z,z,1);
     if(head == z)
       head = newNode;
 
@@ -494,15 +494,16 @@ link STdeserialize(char *str)
     newNode -> red = 0;
   }
   offset++;
- 
 
- newNode -> red = rbColor;
-
-
+ if(head == z)
+    head = newNode;
 
  newNode->l = STdeserialize(str);
+ newNode -> N = newNode -> l -> N+1;
  newNode->r = STdeserialize(str);
- 
+ newNode -> N = newNode -> r -> N+1;
+
+
  return newNode;
 }
 
