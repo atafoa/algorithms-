@@ -1,9 +1,6 @@
 CC = gcc
 FLAGS = 
 
-
-all: a b c d
-
 a: RB.o lab5driver.o 
 	${CC} ${FLAGS} RB.o lab5driver.o 
 	./a.out < lab5.a.dat.txt

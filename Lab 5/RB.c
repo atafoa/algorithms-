@@ -446,6 +446,7 @@ void cleanUpUnbalanced(link h)
 char* STserialize()
 {
 
+return 0;
 }
 
 link STdeserialize(char *str)  
@@ -459,7 +460,7 @@ link STdeserialize(char *str)
   if(*str == '.')
   {
     str++;
-    return;
+    return z;
   }
 
   if(*str == '-')
@@ -489,18 +490,16 @@ link STdeserialize(char *str)
   else
     rbColor = 1;
  
- STnode* newNode = NEW(item,z,z,0)
+ struct STnode* newNode = NEW(item,z,z,0);
  newNode -> red = rbColor;
 
  if(head == z)
   head = newNode;
 
- newNode->l = STdeserialize(*str);
- newNode->r = STdeserialize(*str);
+ newNode->l = STdeserialize(str);
+ newNode->r = STdeserialize(str);
 
  return newNode;
-
-
 }
 
 
