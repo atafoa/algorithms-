@@ -495,25 +495,11 @@ void generateString(link node)
     generateString(node -> r);
 }
 
-void destroyTree(link node)
-{
-  if(node == z)
-    return;
-    
-  destroyTree(node -> l);
-  free(node -> l);
-  destroyTree(node -> r);
-  free(node -> r);
-  return;
-}
-
 char* STserialize()
 {
   getOutputBytes(head);
   outputString = (char *)malloc(outputBytes);
   generateString(head);
-  destroyTree(head);
-  free(head);
   return outputString;
 
 }
