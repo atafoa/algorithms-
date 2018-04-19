@@ -49,7 +49,7 @@ int main()
 	printf("\nTree after insert \n");
 	STprintTree();
 	
-	//outputString = STserialize(); //serialize new rb tree
+	outputString = STserialize(); //serialize new rb tree
 	//printf("%lu %s\n",strlen(outputString)+1,outputString);
 	//free(outputString);
 }

@@ -42,6 +42,8 @@ void STprintTree();           // Dumps out tree
 void cleanUpUnbalanced(link h);  // Includes subtree sizes and verifies a tree
                                  // built without balancing
 
+void getOutputBytes(); //This gets the outputBytes for serializing
+
 char* STserialize();    // Flattens current tree into a pre-order string WRITE THIS FUNCTION
 
 link STdeserialize(char *str);     // Parses string to current red-black tree WRITE THIS FUNCTION

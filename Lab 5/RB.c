@@ -14,6 +14,8 @@ Item NULLitem=(-9999999);  // Data for sentinel
 
 int trace=0;  // Controls trace output for insert
 int offset = 0; //Offset for the *str
+ int outputBytes = 1; //Counts the number of bytes for the outputstring
+
 
 link NEW(Item item, link l, link r, int N)
 // Allocates and fills in a node
@@ -444,10 +446,40 @@ void cleanUpUnbalanced(link h)
   verifyRBproperties();
 }
 
-char* STserialize()
+
+
+void getOutputBytes(link head)
 {
 
-return 0;
+  if(head == z)
+    { outputBytes += 1; //allocates one byte for sentinal
+      return;
+    }
+
+  if(head->item < 0)
+    outputBytes += 1; //allocate one byte for negative sign
+
+  int num = head -> item;
+  while ((num / 10) != 0)
+  {
+    num /= 10;
+    outputBytes += 1;
+  }
+
+  outputBytes += 2;
+  getOutputBytes(head->l);
+  getOutputBytes(head->r);
+}
+char* STserialize(char *str)
+{
+  getOutputBytes(head);
+  printf("Output bytes is: %d\n",outputBytes);
+
+  str = (char *)malloc(outputBytes);
+
+
+
+  return 0;
 }
 
 link STdeserialize(char *str)  
