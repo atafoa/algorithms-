@@ -14,7 +14,8 @@ Item NULLitem=(-9999999);  // Data for sentinel
 
 int trace=0;  // Controls trace output for insert
 int offset = 0; //Offset for the *str
- int outputBytes = 1; //Counts the number of bytes for the outputstring
+int outputBytes = 1; //Counts the number of bytes for the outputstring
+char *outputString; //output string used to serialize
 
 
 link NEW(Item item, link l, link r, int N)
@@ -448,18 +449,18 @@ void cleanUpUnbalanced(link h)
 
 
 
-void getOutputBytes(link head)
+void getOutputBytes(link node)
 {
 
-  if(head == z)
+  if(node == z)
     { outputBytes += 1; //allocates one byte for sentinal
       return;
     }
 
-  if(head->item < 0)
+  if(node->item < 0)
     outputBytes += 1; //allocate one byte for negative sign
 
-  int num = head -> item;
+  int num = node-> item;
   while ((num / 10) != 0)
   {
     num /= 10;
@@ -467,19 +468,40 @@ void getOutputBytes(link head)
   }
 
   outputBytes += 2;
-  getOutputBytes(head->l);
-  getOutputBytes(head->r);
+  getOutputBytes(node->l);
+  getOutputBytes(node->r);
 }
-char* STserialize(char *str)
+
+void generateString(link node)
+{
+  if(node == z)
+  {
+    strcat(outputString, ".");
+    return;
+  }
+
+  char temp[10];
+  sprintf(temp, "%d", node ->item);
+  strcat(outputString, temp);
+
+  if(node -> red == 1)
+  {
+    strcat(outputString, "r");
+  }
+  else
+    strcat(outputString, "b");
+
+    generateString(node -> l);
+    generateString(node -> r);
+}
+
+char* STserialize()
 {
   getOutputBytes(head);
-  printf("Output bytes is: %d\n",outputBytes);
+  outputString = (char *)malloc(outputBytes);
+  generateString(head);
+  return outputString;
 
-  str = (char *)malloc(outputBytes);
-
-
-
-  return 0;
 }
 
 link STdeserialize(char *str)  
