@@ -495,14 +495,30 @@ void generateString(link node)
     generateString(node -> r);
 }
 
+void destroyTree(link node)
+{
+  if(node == z)
+    return;
+    
+  destroyTree(node -> l);
+  free(node -> l);
+  destroyTree(node -> r);
+  free(node -> r);
+  return;
+}
+
 char* STserialize()
 {
   getOutputBytes(head);
   outputString = (char *)malloc(outputBytes);
   generateString(head);
+  destroyTree(head);
+  free(head);
   return outputString;
 
 }
+
+
 
 link STdeserialize(char *str)  
 //Deserializes a string to make a valid RB tree
@@ -558,6 +574,5 @@ link STdeserialize(char *str)
   newNode -> N = newNode -> l -> N +  newNode -> r -> N+ 1; //subtree size is the subtree size for the left subtree + subtree size for the right subtree +
  return newNode;
 }
-
 
 

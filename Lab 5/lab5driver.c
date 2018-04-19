@@ -40,7 +40,7 @@ int main()
 	printf("Tree before insert \n");
 	STprintTree();
 	printf("\n");
-	
+
 	scanf("%d",&insertKeys);
 	for ( i = 0; i < insertKeys; i++) 
 	{
@@ -51,7 +51,7 @@ int main()
 	printf("\nTree after insert \n");
 	STprintTree();
 	printf("\n");
-	)
+	
 	outputString = STserialize(); //serialize new rb tree
 	printf("%lu %s\n",strlen(outputString)+1,outputString);
 	free(outputString);
