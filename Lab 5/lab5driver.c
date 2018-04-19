@@ -37,15 +37,18 @@ int main()
 	verifyRBproperties();
 	free(inputString);
 
-	//STprintTree();
+	printf("Tree before insert \n");
+	STprintTree();
 	scanf("%d",&insertKeys);
 	for ( i = 0; i < insertKeys; i++) 
 	{
 	  scanf("%d",&key);
 	  STinsert(key); //Insert keys
 	}
-	STprintTree();
 
+	printf("\nTree after insert \n");
+	STprintTree();
+	
 	//outputString = STserialize(); //serialize new rb tree
 	//printf("%lu %s\n",strlen(outputString)+1,outputString);
 	//free(outputString);

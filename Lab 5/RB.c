@@ -485,7 +485,7 @@ link STdeserialize(char *str)
   }
 
    num *= sign;
-   struct STnode* newNode = NEW(num,z,z,1);
+   struct STnode* newNode = NEW(num,z,z,0);
     if(head == z)
       head = newNode;
 
@@ -498,12 +498,10 @@ link STdeserialize(char *str)
  if(head == z)
     head = newNode;
 
+
  newNode->l = STdeserialize(str);
- newNode -> N = newNode -> l -> N+1;
  newNode->r = STdeserialize(str);
- newNode -> N = newNode -> r -> N+1;
-
-
+  newNode -> N = newNode -> l -> N +  newNode -> r -> N+ 1; //subtree size is the subtree size for the left subtree + subtree size for the right subtree +
  return newNode;
 }
 
