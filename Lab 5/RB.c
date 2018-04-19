@@ -13,10 +13,9 @@ link z,head;               // Pointers to sentinel and root
 Item NULLitem=(-9999999);  // Data for sentinel
 
 int trace=0;  // Controls trace output for insert
-int offset = 0; //Offset for the *str
-int outputBytes = 1; //Counts the number of bytes for the outputstring
-char *outputString; //output string used to serialize
-
+int offset = 0; //Offset for the input string to help traverse through the Serialized RB tree
+int outputBytes = 1; //Stores the size of the output string Inilized to 1 to account for the new line at the end of the string
+char *outputString; //output string for serializization of a RB tree
 
 link NEW(Item item, link l, link r, int N)
 // Allocates and fills in a node
@@ -447,9 +446,12 @@ void cleanUpUnbalanced(link h)
   verifyRBproperties();
 }
 
-
-
 void getOutputBytes(link node)
+//Function that generates the size of an output tree requires the head node
+//Checks if we have sentinels and allocates numbers for it
+//Check if number is negative
+//Automatically Allocates bytes for the color of the number and the number itself
+//Performs preorder traversal on the RB Tree 
 {
 
   if(node == z)
@@ -467,16 +469,20 @@ void getOutputBytes(link node)
     outputBytes += 1;
   }
 
-  outputBytes += 2;
+  outputBytes += 2; //allocate 2 bytes for colour and number
   getOutputBytes(node->l);
   getOutputBytes(node->r);
 }
 
 void generateString(link node)
+//Function that generates the output string
+//Checks if we have a sentinel
+//Allocates the r or b based on the color of the node
+//Allocates - based on sign of the node
 {
   if(node == z)
   {
-    strcat(outputString, ".");
+    strcat(outputString, "."); 
     return;
   }
 
@@ -496,6 +502,10 @@ void generateString(link node)
 }
 
 char* STserialize()
+//Serializes a valid RB tree and returns a string
+//Mallocs a string by the size of the output string using getOutputBytes
+//Generates a string using helper function generateString
+//Returns a string
 {
   getOutputBytes(head);
   outputString = (char *)malloc(outputBytes);
@@ -504,10 +514,10 @@ char* STserialize()
 
 }
 
-
-
 link STdeserialize(char *str)  
 //Deserializes a string to make a valid RB tree
+//Uses an offset to move from character to character in a string
+//Builds the tree using preorder traversal
 {
   int sign;
   int num = 0;
@@ -525,7 +535,7 @@ link STdeserialize(char *str)
     sign = -1;
     offset++;
   }
-  //checks if the 
+  //checks if the sign is positve
   else if (*(str+offset) == '+')
   {
     sign = 1;
@@ -536,14 +546,12 @@ link STdeserialize(char *str)
   
   while ( *(str+offset) >= '0' && *(str+offset) <= '9')
   {
-    num = 10 * num + (*(str+offset) - '0'); 
+    num = 10 * num + (*(str+offset) - '0'); //Converts the char to an integer using the ASCII value for each number
     offset++;
   }
 
    num *= sign;
-   struct STnode* newNode = NEW(num,z,z,0);
-    if(head == z)
-      head = newNode;
+   struct STnode* newNode = NEW(num,z,z,0); //crerate a new node using the information from the string
 
   if(*(str+offset) == 'b')
   {
@@ -551,14 +559,14 @@ link STdeserialize(char *str)
   }
   offset++;
 
- if(head == z)
-    head = newNode;
+  //if the head is a sentinel set our head to point to the data from our newely created node
+    if(head == z)
+      head = newNode;
 
-
- newNode->l = STdeserialize(str);
- newNode->r = STdeserialize(str);
-  newNode -> N = newNode -> l -> N +  newNode -> r -> N+ 1; //subtree size is the subtree size for the left subtree + subtree size for the right subtree +
- return newNode;
+  newNode->l = STdeserialize(str);
+  newNode->r = STdeserialize(str);
+  newNode -> N = newNode -> l -> N +  newNode -> r -> N+ 1; //subtree size is the subtree size for the left subtree + subtree size for the right subtree + 1
+  return newNode;
 }
 
 

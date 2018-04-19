@@ -14,7 +14,7 @@
 int main()
 {
 
-	int inputBytes;
+	int inputBytes; 
 	char * inputString, * outputString;
 	char formatString[100];
 	int insertKeys, i, key;
@@ -33,11 +33,11 @@ int main()
 
 	scanf(formatString,inputString);
 	STinit();
-	STdeserialize(inputString); //Deserialize 
-	verifyRBproperties();
+	STdeserialize(inputString); //Deserializes the input string
+	verifyRBproperties();		//Checks if the deserialized tree is a valid RB tree
 	free(inputString);
 
-	printf("Tree before insert \n");
+	printf("Tree before inserting new keys \n\n");
 	STprintTree();
 	printf("\n");
 
@@ -45,14 +45,14 @@ int main()
 	for ( i = 0; i < insertKeys; i++) 
 	{
 	  scanf("%d",&key);
-	  STinsert(key); //Insert keys
+	  STinsert(key); //Insert new keys 
 	}
 
-	printf("\nTree after insert \n");
+	printf("\nTree after inserting new keys \n\n");
 	STprintTree();
 	printf("\n");
 	
-	outputString = STserialize(); //serialize new rb tree
+	outputString = STserialize(); //serialize new RB tree after inserting new keys
 	printf("%lu %s\n",strlen(outputString)+1,outputString);
 	free(outputString);
 }
