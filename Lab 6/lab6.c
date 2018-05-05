@@ -13,11 +13,11 @@ int sp = 0;
 int vertices, flag;
 
 int hasTwoPebbles(int z);
-void direct(int x, int y);
-void findPebble(int z);
+void directEdge(int x, int y);
+void find(int z);
 void getPebble(int z, int pebble);
-void printVertice(int size);
-void mallocFail();
+void print(int size);
+void mallocError();
 
 int main() 
 {
@@ -29,7 +29,7 @@ int main()
 
     if (!array || !predecessor) 
     {
-        mallocFail();
+        mallocError();
     }
 
     for (i = 0; i < vertices; i++) 
@@ -38,7 +38,7 @@ int main()
 
 	    if (!array[i]) 
         {
-            mallocFail();
+            mallocError();
         }
 	    array[i][0] = array[i][1] = -1;
     }
@@ -46,20 +46,20 @@ int main()
     for (i = 0; i < (vertices*2)-3; i++)
     {
 	    scanf("%d %d", &x, &y);
-        printf("Processing {%d, %d}\n", x, y);
+        printf("Looking into {%d, %d}\n", x, y);
         flag = 0;
-	    findPebble(x);  // Get 2 pebbles at x location.
-        findPebble(y);  // Get 2 pebbles at y loaction.
-        printVertice(vertices);
+	    find(x);  // find 2 pebbles at x.
+        find(y);  // find 2 pebbles at y.
+        print(vertices);
 
         if (hasTwoPebbles(x) && hasTwoPebbles(y)) 
         {  
             printf("Directing %d to %d\n\n", x, y);
-            direct(x, y);
-            printVertice(vertices);    
+            directEdge(x, y);
+            print(vertices);    
         }
     }
-    printVertice(vertices);
+    print(vertices);
     return 0;
 }
 
@@ -75,93 +75,93 @@ int hasTwoPebbles(int z)
     }
 }
 
-// When doing the move directs a pebble in a direction
-void direct(int x, int y) 
+// When doing the move a pebble in a direction
+void directEdge(int x, int y) 
 {
-    array[x][0] = y;    // X's pebble will now point to Y.
+    array[x][0] = y;    // X's pebble will point to Y.
 }
 
 
 //Goes through all the nodes and finds pebbles for each node
-void findPebble(int z) 
+void find(int i) 
 {
-    if (array[z][0] == -1 && array[z][1] == -1) 
-    { // Base case. Pebbles already exist.
-        printf("Base case, both pebbles exist at vertex %d.\n", z);
+    if (array[i][0] == -1 && array[i][1] == -1) 
+    { // Base case.
+        printf("Base case, both pebbles exist at vertex %d.\n", i);
         return;
     }
-    if (array[z][0] != -1) { // First pebble does not exist.
-        printf("First pebble doesn't exist at %d.\n", z);
-        getPebble(z, 0);    // Get a pebble where z,0 points to.
+
+    if (array[i][0] != -1) 
+    { // First pebble does not exist.
+        printf("First pebble doesn't exist at %d.\n", i);
+        getPebble(i, 0);    // Get a pebble where i,0 points to.
         flag = 1;
     }
-    if (array[z][1] != -1) { // Second pebble does not exist.
-        printf("Second pebble doesn't exist at %d.\n", z);
-        getPebble(z, 1);    // Get a pabble where z,1 points to.
+
+    if (array[i][1] != -1) 
+    { // Second pebble does not exist.
+        printf("Second pebble doesn't exist at %d.\n", i);
+        getPebble(i, 1);    // Get a pabble where i,1 points to.
         flag = 1;
     }
 }
 
 
 //Gets pebbles for each node
-void getPebble(int z, int pebble) 
+void getPebble(int i, int pebble) 
 {
-    printf("Getting a pebble.\n");
-    printf("The stack pointer is at %d comparing to %d vertices.\n", sp, vertices);
-
     if (sp++ > vertices*2) 
     {
         printf("Exiting.\n");
         return;
     }
-    // check the direction the pebbles points to
+    // check the directEdgeion the pebbles points to
     // if no pebble exists, move to next node
 
-    if (array[array[z][pebble]][0] != -1 && array[array[z][pebble]][1] != -1)
+    if (array[array[i][pebble]][0] != -1 && array[array[i][pebble]][1] != -1)
      {
-        printf("No pebble existed. Looking at node %d now.\n", array[z][pebble]);
-        getPebble(array[z][pebble], 0); // try and grab a single pebble
+        printf("No pebble existed. Looking at node %d now.\n", array[i][pebble]);
+        getPebble(array[i][pebble], 0); // try and get a single pebble
 
-        if (array[z][pebble] != -1) 
+        if (array[i][pebble] != -1) 
         {
-            getPebble(array[z][pebble], 1); // try and grab a single pebble        
+            getPebble(array[i][pebble], 1); // try and get a single pebble        
         }
         sp++;
     }
-    // otherwise, we can pull it back.
-    if (array[array[z][pebble]][0] == -1) 
+
+    if (array[array[i][pebble]][0] == -1) 
     {
-        printf("Returning, with a pebble from node %d.\n", array[z][pebble]);
-        array[array[z][pebble]][0] = z;
-        array[z][pebble] = -1;
+        printf("Returning, with a pebble from node %d.\n", array[i][pebble]);
+        array[array[i][pebble]][0] = i;
+        array[i][pebble] = -1;
         sp--;
         return;
-        // pebble found, bring it back!
+        // pebble found
     }
-    else if (array[array[z][pebble]][1] == -1) 
+    else if (array[array[i][pebble]][1] == -1) 
     {
-        printf("Exiting, with a pebble from node %d.\n", array[z][pebble]);
-        array[array[z][pebble]][1] = z;
-        array[z][pebble] = -1;
+        printf("Exiting, with a pebble from node %d.\n", array[i][pebble]);
+        array[array[i][pebble]][1] = i;
+        array[i][pebble] = -1;
         sp--;
         return;
-        // pebble found, bring it back!
+        // pebble found
     }
 }
 
 
 //Print all vertices
-void printVertice(int size) 
+void print(int size) 
 {
-    printf("END\n");
     int i;
     for (i = 0; i < size; i++) {
 	    printf("%d maps to %d %d\n", i, array[i][0], array[i][1]);
     }
 }
 
-void mallocFail()
+void mallocError()
  {
-    printf("MALLOC FAILED!\n");
+    printf("ERROR!\n");
     exit(0);
 }
